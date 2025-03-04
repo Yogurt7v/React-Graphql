@@ -31,6 +31,17 @@ function App() {
     }
   `;
 
+  const CREATE_USER = gql`
+    mutation CreateUser($name: String!, $age: Int!, $isMarried: Boolean) {
+      createUser(name: $name, age: $age, isMarried: $isMarried) {
+        id
+        name
+        age
+        isMarried
+      }
+    }
+  `;
+
   const { data, loading, error } = useQuery(GET_USERS);
 
   const {
@@ -41,6 +52,27 @@ function App() {
     variables: { id: '2' },
   });
 
+  const [createUser] = useMutation(
+    CREATE_USER
+    //   {
+    //   variables: {
+    //     name: 'Fred',
+    //     age: 32,
+    //     isMarried: true,
+    //   },
+    // }
+  );
+
+  const handleClick = async () => {
+    await createUser({
+      variables: {
+        name: 'Fred',
+        age: 32,
+        isMarried: true,
+      },
+    });
+  };
+
   if (loading) return <div>Loading...</div>;
 
   if (error || getUserByIdError) return <h3>error.message</h3>;
@@ -48,7 +80,7 @@ function App() {
   return (
     <>
       <h1>Users</h1>
-
+      <button onClick={handleClick}>Добавить пользователя</button>
       <ol>
         {data.getUsers.map((user: User) => (
           <li key={user.id}>

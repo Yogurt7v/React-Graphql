@@ -38,12 +38,15 @@ const resolvers = {
 
   Mutation: {
     createUser: (parent, args) => {
-      mockUsers.push({
-        id: (mockUsers.length() + 1).toString(),
-        name: args.name,
-        age: args.age,
-        isMarried: args.isMarried,
-      });
+      const { name, age, isMarried } = args;
+      const newUser = {
+        id: (mockUsers.length + 1).toString(),
+        name,
+        age,
+        isMarried,
+      };
+      console.log('пользователь добавлен', newUser);
+      mockUsers.push(newUser);
     },
   },
 };
