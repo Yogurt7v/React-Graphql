@@ -25,10 +25,29 @@ const typeDefs = `
   }
 `;
 
-const resolvers = {};
+const resolvers = {
+  Query: {
+    getUsers: () => {
+      return mockUsers;
+    },
 
+    getUserById: (parent, args) => {
+      return mockUsers.find((user) => user.id == args.id);
+    },
+  },
+
+  Mutation: {
+    createUser: (parent, args) => {
+      mockUsers.push({
+        id: (mockUsers.length() + 1).toString(),
+        name: args.name,
+        age: args.age,
+        isMarried: args.isMarried,
+      });
+    },
+  },
+};
 const server = new ApolloServer({ typeDefs, resolvers });
-
 const { url } = await startStandaloneServer(server, {
   listen: {
     port: 4000,
